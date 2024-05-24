@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-hw-01",
+  "version": "1.0.0",
+  "description": "nodejs-hw-01",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "get-all": "node src/scripts/getAllContacts",
+    "generate": "node src/scripts/generateContacts.js",
+    "add-one": "node src/scripts/addOneContact.js",
+    "count": "node src/scripts/countContacts.js",
+    "thanos": "node src/scripts/thanos.js",
+    "remove-all": "node src/scripts/removeAllContacts.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.2.0",
+    "@faker-js/faker": "^8.4.1",
+    "eslint": "^9.2.0",
+    "globals": "^15.1.0",
+    "nodemon": "^3.1.0"
+  }
+}
