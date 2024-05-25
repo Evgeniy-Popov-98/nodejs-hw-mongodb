@@ -4,12 +4,12 @@ import cors from 'cors';
 import { env } from './utils/env.js';
 import { ENV_VARS } from './constants/constants.js';
 import { getAllContacts, getContactById } from './servies/contacts.js';
-import {
-  notFoudMiddleware,
-  errorHandlerMiddleware,
-} from './middleware/notFoudMiddleware.js';
+import { notFoudMiddleware } from './middleware/notFoudMiddleware.js';
+import { errorHandlerMiddleware } from './middleware/errorHandlerMiddleware.js';
 
 export const setupServer = () => {
+  const app = express();
+
   app.use(
     pino({
       transport: {
@@ -20,31 +20,30 @@ export const setupServer = () => {
 
   app.use(cors());
 
-  const app = express();
-
-  app.get('/contacts', async (req, res, next) => {
+  app.get('/contacts', async (req, res) => {
     const contacts = await getAllContacts();
     res.json({
       status: 200,
-      message: 'Successfully get all contacts',
+      message: 'Successfully found contacts!',
       data: contacts,
     });
   });
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
-    const id = req.params.contactId;
-    const contact = await getContactById(id);
+  app.get('/contacts/:contactId', async (req, res) => {
+    const { contactId } = req.params;
+    const contact = await getContactById(contactId);
+    console.log(contact);
 
     if (!contact) {
       return res.status(404).json({
         status: 404,
-        message: `Contact with id ${id} not found!`,
+        message: `Contact with id ${contactId} not found!`,
       });
     }
 
     res.json({
       status: 200,
-      message: `Successfully get contact with id ${id}!`,
+      message: `Successfully found contact with id {contactId}!`,
       data: contact,
     });
   });
