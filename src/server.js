@@ -1,7 +1,13 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-import
+import { env } from './utils/env.js';
+import { ENV_VARS } from './constants/constants.js';
+import { getAllContacts, getContactById } from './servies/contacts.js';
+import {
+  notFoudMiddleware,
+  errorHandlerMiddleware,
+} from './middleware/notFoudMiddleware.js';
 
 export const setupServer = () => {
   app.use(
@@ -16,13 +22,38 @@ export const setupServer = () => {
 
   const app = express();
 
-  app.use('*', (req, res, next) => {
-    res.status(404).json({
-      message: 'Not found',
+  app.get('/contacts', async (req, res, next) => {
+    const contacts = await getAllContacts();
+    res.json({
+      status: 200,
+      message: 'Successfully get all contacts',
+      data: contacts,
     });
   });
 
-	cosnt PORT = env(ENV_VARS)
+  app.get('/contacts/:contactId', async (req, res, next) => {
+    const id = req.params.contactId;
+    const contact = await getContactById(id);
+
+    if (!contact) {
+      return res.status(404).json({
+        status: 404,
+        message: `Contact with id ${id} not found!`,
+      });
+    }
+
+    res.json({
+      status: 200,
+      message: `Successfully get contact with id ${id}!`,
+      data: contact,
+    });
+  });
+
+  app.use(notFoudMiddleware);
+
+  app.use(errorHandlerMiddleware);
+
+  const PORT = env(ENV_VARS.PORT, 3000);
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });

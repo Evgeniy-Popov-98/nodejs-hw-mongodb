@@ -1,4 +1,7 @@
-import { PATH_DB } from './constants/constants';
+import { initMongoConnection } from './db/initMongoConnection';
+import { setupServer } from './server';
 
-console.log(PATH_DB);
-console.log('Hello!');
+(async () => {
+  await initMongoConnection();
+  setupServer();
+})();

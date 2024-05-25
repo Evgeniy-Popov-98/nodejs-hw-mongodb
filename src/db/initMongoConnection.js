@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { env } from '../utils/env';
 import { ENV_VARS } from '../constants/constants';
 
 export const initMongoConnection = async () => {
