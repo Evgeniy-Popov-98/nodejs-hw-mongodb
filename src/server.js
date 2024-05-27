@@ -6,6 +6,7 @@ import { ENV_VARS } from './constants/constants.js';
 import { getAllContacts, getContactById } from './servies/contacts.js';
 import { notFoudMiddleware } from './middleware/notFoudMiddleware.js';
 import { errorHandlerMiddleware } from './middleware/errorHandlerMiddleware.js';
+import mongoose from 'mongoose';
 
 export const setupServer = () => {
   const app = express();
@@ -30,8 +31,9 @@ export const setupServer = () => {
   });
 
   app.get('/contacts/:contactId', async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
+    const { contactId } = req.params;
+
+    if (mongoose.isValidObjectId(contactId)) {
       const contact = await getContactById(contactId);
 
       res.json({
@@ -39,9 +41,11 @@ export const setupServer = () => {
         message: `Successfully found contact with id ${contactId}!`,
         data: contact,
       });
-    } catch (error) {
-      next(error);
-      return;
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message: `Contact with id ${contactId} not found!`,
+      });
     }
   });
 
