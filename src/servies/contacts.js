@@ -31,4 +31,6 @@ export const upsertsContact = async (id, payload, options = {}) => {
     isNew: !result?.lastErrorObject?.updatedExisting,
   };
 };
-// export const
+export const deleteContactById = async (contactId) => {
+  await Contact.findByIdAndDelete(contactId);
+};
