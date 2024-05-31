@@ -6,12 +6,17 @@ export const getAllContacts = async () => {
 };
 
 export const getContactById = async (id) => {
-  const data = await Contact.findById(id);
-  return data;
+  const contact = await Contact.findById(id);
+
+  if (!contact) {
+    throw createHttpError(404, { message: 'Contact not found' });
+  }
+  return contact;
 };
 
 export const createContact = async (payload) => {
   const contact = await Contact.create(payload);
+
   return contact;
 };
 
@@ -22,8 +27,8 @@ export const upsertsContact = async (id, payload, options = {}) => {
     ...options,
   });
 
-  if (!result || !result.value) {
-    throw createHttpError(404, 'Contact not foud');
+  if (!result && !result.value) {
+    throw createHttpError(404, { message: 'Contact not found' });
   }
 
   return {
@@ -32,5 +37,9 @@ export const upsertsContact = async (id, payload, options = {}) => {
   };
 };
 export const deleteContactById = async (contactId) => {
-  await Contact.findByIdAndDelete(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
+
+  if (!result) {
+    throw createHttpError(404, { message: 'Contact not found' });
+  }
 };

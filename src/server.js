@@ -3,9 +3,9 @@ import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
 import { ENV_VARS } from './constants/constants.js';
-import { notFoudMiddleware } from './middleware/notFoudMiddleware.js';
-import { errorHandlerMiddleware } from './middleware/errorHandlerMiddleware.js';
 import contactsRouter from './routers/contacts.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 export const setupServer = () => {
   const app = express();
@@ -29,9 +29,9 @@ export const setupServer = () => {
 
   app.use(contactsRouter);
 
-  app.use(notFoudMiddleware);
+  app.use(notFoundHandler);
 
-  app.use(errorHandlerMiddleware);
+  app.use(errorHandler);
 
   const PORT = env(ENV_VARS.PORT, 3000);
   app.listen(PORT, () => {
