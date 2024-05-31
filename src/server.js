@@ -3,10 +3,9 @@ import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
 import { ENV_VARS } from './constants/constants.js';
-import { getAllContacts, getContactById } from './servies/contacts.js';
 import { notFoudMiddleware } from './middleware/notFoudMiddleware.js';
 import { errorHandlerMiddleware } from './middleware/errorHandlerMiddleware.js';
-import mongoose from 'mongoose';
+import contactsRouter from './routers/contacts.js';
 
 export const setupServer = () => {
   const app = express();
@@ -21,40 +20,14 @@ export const setupServer = () => {
 
   app.use(cors());
 
-  app.get('/contacts', async (req, res) => {
-    const contacts = await getAllContacts();
-    res.json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
-  });
+  app.use(
+    express.json({
+      type: ['application/json', 'application/vnd.api+json'],
+      limit: '1mb',
+    }),
+  );
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
-    const { contactId } = req.params;
-
-    if (mongoose.isValidObjectId(contactId)) {
-      const contact = await getContactById(contactId);
-
-      if (!contact) {
-        return res.status(404).json({
-          status: 404,
-          message: `Contact with id ${contactId} not found!`,
-        });
-      }
-
-      res.json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data: contact,
-      });
-    } else {
-      return res.status(404).json({
-        status: 404,
-        message: `Contact with id ${contactId} is not valid `,
-      });
-    }
-  });
+  app.use(contactsRouter);
 
   app.use(notFoudMiddleware);
 
