@@ -51,7 +51,7 @@ export const patchContactController = async (req, res) => {
 
   const contact = await upsertsContact(contactId, body);
 
-  if (!contact) {
+  if (contact) {
     throw createHttpError(404, { message: 'Contact not found' });
   }
 
@@ -72,7 +72,7 @@ export const putContactController = async (req, res) => {
     upsert: true,
   });
 
-  if (!contact) {
+  if (contact) {
     throw createHttpError(404, { message: 'Contact not found' });
   }
 
