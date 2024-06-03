@@ -21,7 +21,10 @@ export const upsertsContact = async (id, payload, options = {}) => {
     ...options,
   });
 
-  return result;
+  return {
+    result,
+    isNew: !result?.lastErrorObject?.updatedExisting,
+  };
 };
 
 export const deleteContactById = async (contactId) => {
