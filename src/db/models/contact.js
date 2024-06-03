@@ -8,9 +8,9 @@ const contactSchema = new Schema(
     isFavourite: { type: Boolean, default: false },
     contactType: {
       type: String,
-      enum: ['work', 'home', 'persona'],
+      enum: ['work', 'home', 'personal'],
       require: false,
-      default: true,
+      default: 'personal',
     },
   },
   {
