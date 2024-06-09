@@ -6,7 +6,7 @@ export const updateContactSchema = Joi.object({
     'string.min': 'Min string length is not achieved!',
     'string.max': 'Maximum string length exceeded!',
   }),
-  phoneNumber: Joi.number(),
+  phoneNumber: Joi.string(),
   email: Joi.string().min(3).max(20).messages({
     'any.required': '{{#label}} Is Required!',
     'string.min': 'Min string length is not achieved!',
