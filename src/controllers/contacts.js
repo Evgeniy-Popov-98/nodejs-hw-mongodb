@@ -7,9 +7,11 @@ import {
 } from '../servies/contacts.js';
 import createHttpError from 'http-errors';
 import { isValidContactId } from '../middleware/isValidContactId.js';
+import { parsePaginationPrams } from '../utils/parsePaginationParams.js';
 
 export const getContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+  const { page, perPage } = parsePaginationPrams(req.query);
+  const contacts = await getAllContacts({ page, perPage });
 
   res.json({
     status: 200,
