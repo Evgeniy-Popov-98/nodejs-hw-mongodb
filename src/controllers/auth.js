@@ -1,4 +1,4 @@
-export const registerUserController = (req, res, next) => {
+export const registerUserController = (req, res) => {
   res.json({
     status: 201,
     message: 'Successfully registered a user!',
