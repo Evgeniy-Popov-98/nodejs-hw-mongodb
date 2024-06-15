@@ -3,6 +3,7 @@ import { validateBody } from '../middleware/validateBody';
 import { ctrlWrapper } from '../utils/ctrlWrapper';
 import {
   loginUserController,
+  logoutUserController,
   registerUserController,
 } from '../controllers/auth';
 import { registerUserSchema } from '../validation/registerUserSchema';
@@ -21,5 +22,7 @@ authRouter.post(
   validateBody(loginUserSchema),
   ctrlWrapper(loginUserController),
 );
+
+authRouter.post('/logout', ctrlWrapper(logoutUserController));
 
 export default authRouter;

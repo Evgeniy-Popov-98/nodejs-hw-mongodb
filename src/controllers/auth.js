@@ -1,5 +1,5 @@
 import { REFRESH_TOKEN_LIFE_TIME } from '../constants/constants';
-import { loginUser, registerUser } from '../servies/auth';
+import { loginUser, logoutUser, registerUser } from '../servies/auth';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -29,4 +29,17 @@ export const loginUserController = async (req, res) => {
     message: 'Successfully logged in an user!',
     data: { accessToken: session.accessToken },
   });
+};
+
+export const logoutUserController = async (req, res) => {
+  if (req.cookies.sessionId)
+    await logoutUser({
+      sessionId: req.cookies.sessionId,
+      sessionToken: req.cookies.sessionToken,
+    });
+
+  res.clearCoolie('sessionId');
+  res.clearCoolie('sessionToken');
+
+  res.status(204).send();
 };
