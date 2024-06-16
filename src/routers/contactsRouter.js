@@ -11,13 +11,13 @@ import {
 import { validateBody } from '../middleware/validateBody.js';
 import { createContactSchema } from '../validation/createContactSchema.js';
 import { updateContactSchema } from '../validation/updateContactSchema.js';
-import authRouter from './auth.js';
 import { ROLES } from '../constants/constants.js';
 import { checkRoles } from '../middleware/checkRoles.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 const contactsRouter = Router();
 
-contactsRouter.use(authRouter);
+contactsRouter.use(authenticate);
 
 contactsRouter.get(
   '/',

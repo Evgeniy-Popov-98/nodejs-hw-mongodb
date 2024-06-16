@@ -1,10 +1,10 @@
-import { REFRESH_TOKEN_LIFE_TIME } from '../constants/constants';
+import { REFRESH_TOKEN_LIFE_TIME } from '../constants/constants.js';
 import {
   loginUser,
   logoutUser,
   refreshUser,
   registerUser,
-} from '../servies/auth';
+} from '../servies/auth.js';
 
 const setupSession = (res, session) => {
   res.cookie('sessionId', session._id, {

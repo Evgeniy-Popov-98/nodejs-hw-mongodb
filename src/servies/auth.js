@@ -1,11 +1,11 @@
 import createHttpError from 'http-errors';
-import { User } from '../db/models/user';
+import { User } from '../db/models/user.js';
 import bcrypt from 'bcrypt';
-import { Session } from '../db/models/session';
+import { Session } from '../db/models/session.js';
 import {
   ACCESS_TOKEN_LIFE_TIME,
   REFRESH_TOKEN_LIFE_TIME,
-} from '../constants/constants';
+} from '../constants/constants.js';
 import { randomBytes } from 'crypto';
 
 const createSession = () => {
@@ -22,12 +22,9 @@ export const registerUser = async (payload) => {
 
   if (user) throw createHttpError(409, 'Email in use');
 
-  const hashedPassword = await bcrypt.hash(payload.password, 10);
+  await bcrypt.hash(payload.password, 10);
 
-  return await User.create({
-    ...payload,
-    password: hashedPassword, // clear
-  });
+  return await User.create({ ...payload });
 };
 
 export const loginUser = async (payload) => {

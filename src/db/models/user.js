@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { ROLES } from '../../constants/constants';
+import { ROLES } from '../../constants/constants.js';
 
 const userSchema = new Schema(
   {
@@ -8,8 +8,7 @@ const userSchema = new Schema(
     password: { type: String, require: true },
     role: {
       type: String,
-      require: true,
-      default: [ROLES.USER],
+      default: ROLES.USER,
       enum: [ROLES.USER, ROLES.ADMIN],
     },
   },
@@ -19,7 +18,7 @@ const userSchema = new Schema(
   },
 );
 
-userSchema.methods.toJson = function () {
+userSchema.methods.toJSON = function () {
   const object = this.toObject();
   delete object.password;
   return object;
