@@ -26,14 +26,14 @@ export const registerUser = async (payload) => {
 
   return await User.create({
     ...payload,
-    password: hashedPassword,
+    password: hashedPassword, // clear
   });
 };
 
 export const loginUser = async (payload) => {
   const user = await User.findOne({ email: payload.email });
 
-  if (!user) throw createHttpError(404, 'User not found');
+  if (!user) throw createHttpError(401, 'User not found');
 
   const isEqual = await bcrypt.compare(payload.password, user.password);
 

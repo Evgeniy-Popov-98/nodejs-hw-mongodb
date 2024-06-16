@@ -43,8 +43,9 @@ export const getContactById = (id) => {
   return contact;
 };
 
-export const createContact = (payload) => {
-  const contact = Contact.create(payload);
+export const createContact = (payload, userId) => {
+  const contact = Contact.create({ ...payload, userId });
+
   return contact;
 };
 
