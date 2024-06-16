@@ -44,7 +44,7 @@ export const getContactById = (id) => {
 };
 
 export const createContact = (payload, userId) => {
-  const contact = Contact.create({ ...payload, userId });
+  const contact = Contact.create({ ...payload, userId: userId });
 
   return contact;
 };

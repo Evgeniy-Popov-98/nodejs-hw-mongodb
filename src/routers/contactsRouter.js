@@ -27,7 +27,7 @@ contactsRouter.get(
 
 contactsRouter.get(
   '/:contactId',
-  checkRoles(ROLES.USER),
+  checkRoles(ROLES.ADMIN, ROLES.USER),
   ctrlWrapper(getContactByIdController),
 );
 
