@@ -22,9 +22,9 @@ export const registerUser = async (payload) => {
 
   if (user) throw createHttpError(409, 'Email in use');
 
-  await bcrypt.hash(payload.password, 10);
+  const hashedPassword = await bcrypt.hash(payload.password, 10);
 
-  return await User.create({ ...payload });
+  return await User.create({ ...payload, password: hashedPassword });
 };
 
 export const loginUser = async (payload) => {
@@ -47,7 +47,7 @@ export const loginUser = async (payload) => {
 };
 
 export const refreshUser = async ({ sessionId, refreshToken }) => {
-  const session = await Session.findOne({ id: sessionId, refreshToken });
+  const session = await Session.findOne({ _id: sessionId, refreshToken });
 
   if (!session) throw createHttpError(401, 'Session not found');
 
@@ -62,9 +62,9 @@ export const refreshUser = async ({ sessionId, refreshToken }) => {
   });
 };
 
-export const logoutUser = async ({ sessionId, sessionToken }) => {
+export const logoutUser = async ({ sessionId, refreshToken }) => {
   return await Session.deleteOne({
     _id: sessionId,
-    refreshToken: sessionToken,
+    refreshToken,
   });
 };

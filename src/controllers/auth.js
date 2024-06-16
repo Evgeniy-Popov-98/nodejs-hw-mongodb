@@ -24,7 +24,7 @@ export const registerUserController = async (req, res) => {
   res.json({
     status: 201,
     message: 'Successfully registered a user!',
-    data: user,
+    data: { name: user.name, email: user.email },
   });
 };
 
@@ -59,11 +59,11 @@ export const logoutUserController = async (req, res) => {
   if (req.cookies.sessionId)
     await logoutUser({
       sessionId: req.cookies.sessionId,
-      sessionToken: req.cookies.sessionToken,
+      refreshToken: req.cookies.refreshToken,
     });
 
-  res.clearCoolie('sessionId');
-  res.clearCoolie('sessionToken');
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
 
   res.status(204).send();
 };
