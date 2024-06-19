@@ -17,7 +17,7 @@ import { authenticate } from '../middleware/authenticate.js';
 
 const contactsRouter = Router();
 
-contactsRouter.use(authenticate);
+contactsRouter.use('/', authenticate);
 
 contactsRouter.get(
   '/',
@@ -33,7 +33,6 @@ contactsRouter.get(
 
 contactsRouter.post(
   '/',
-  checkRoles(ROLES.ADMIN),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );

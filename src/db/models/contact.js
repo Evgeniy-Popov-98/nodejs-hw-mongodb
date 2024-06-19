@@ -12,7 +12,7 @@ const contactSchema = new Schema(
       require: false,
       default: 'personal',
     },
-    userId: { type: Schema.ObjectId, require: false },
+    userId: { type: Schema.ObjectId, require: true },
   },
   {
     timestamps: true,

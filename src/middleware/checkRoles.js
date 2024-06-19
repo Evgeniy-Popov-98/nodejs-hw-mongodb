@@ -31,10 +31,7 @@ export const checkRoles =
         userId: user._id,
       });
 
-      if (user) {
-        next();
-        return;
-      }
+      if (user) return next();
     }
 
     next(createHttpError(403, 'Forbidden'));
