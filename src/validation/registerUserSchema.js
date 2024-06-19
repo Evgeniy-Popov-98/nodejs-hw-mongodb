@@ -12,4 +12,7 @@ export const registerUserSchema = Joi.object({
   password: Joi.string().required().messages({
     'any.required': '{{#label}} Is Required!',
   }),
+  role: Joi.string().required().messages({
+    'any.required': '{{#label}} Is Required!',
+  }),
 });

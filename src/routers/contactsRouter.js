@@ -33,6 +33,7 @@ contactsRouter.get(
 
 contactsRouter.post(
   '/',
+  checkRoles(ROLES.ADMIN),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );

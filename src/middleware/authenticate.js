@@ -32,7 +32,7 @@ export const authenticate = async (req, res, next) => {
     return;
   }
 
-  const user = User.findById(session.userId);
+  const user = await User.findById(session.userId);
 
   if (!user) {
     next(createHttpError(401, 'User not found'));

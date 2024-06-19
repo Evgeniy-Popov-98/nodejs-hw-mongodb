@@ -19,19 +19,19 @@ export const checkRoles =
     }
 
     if (roles.includes(ROLES.USER) && role === ROLES.USER) {
-      const { userId } = req.params;
+      const { contactId } = req.params;
 
-      if (!userId) {
+      if (!contactId) {
         next(createHttpError(403, 'User ID not found!'));
         return;
       }
 
-      const user = await Contact.findOne({
-        _id: userId,
+      const contact = await Contact.findOne({
+        _id: contactId,
         userId: user._id,
       });
 
-      if (user) return next();
+      if (contact) return next();
     }
 
     next(createHttpError(403, 'Forbidden'));
