@@ -14,10 +14,13 @@ import { updateContactSchema } from '../validation/updateContactSchema.js';
 import { ROLES } from '../constants/constants.js';
 import { checkRoles } from '../middleware/checkRoles.js';
 import { authenticate } from '../middleware/authenticate.js';
+import { isValidContactId } from '../middleware/isValidContactId.js';
 
 const contactsRouter = Router();
 
 contactsRouter.use('/', authenticate);
+
+contactsRouter.use('./:contactId', isValidContactId('contactId'));
 
 contactsRouter.get(
   '/',
