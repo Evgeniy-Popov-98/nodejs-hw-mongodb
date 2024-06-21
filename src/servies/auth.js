@@ -1,12 +1,17 @@
 import createHttpError from 'http-errors';
-import { User } from '../db/models/user.js';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
+
+import { User } from '../db/models/user.js';
 import { Session } from '../db/models/session.js';
 import {
   ACCESS_TOKEN_LIFE_TIME,
   REFRESH_TOKEN_LIFE_TIME,
+  SMTP,
 } from '../constants/constants.js';
-import { randomBytes } from 'crypto';
+import { env } from '../utils/env.js';
+import { sendEmail } from '../utils/sendEMail.js';
 
 const createSession = () => {
   return {
@@ -66,5 +71,30 @@ export const logoutUser = async ({ sessionId, refreshToken }) => {
   return await Session.deleteOne({
     _id: sessionId,
     refreshToken,
+  });
+};
+
+export const requestResetEmail = async (email) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found!');
+  }
+
+  const resetPassword = jwt.sing(
+    {
+      sub: user._id,
+      email,
+    },
+    env('JWT_SECRET'),
+    {
+      expiresIn: '15m',
+    },
+  );
+
+  await sendEmail({
+    from: env(SMTP.SMTP_FROM),
+    to: email,
+    subject: 'Reset your password',
   });
 };
