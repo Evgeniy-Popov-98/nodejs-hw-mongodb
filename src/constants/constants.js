@@ -31,3 +31,5 @@ export const SMTP = {
   SMTP_PASSWORD: 'SMTP_PASSWORD',
   SMTP_FROM: 'SMTP_FROM',
 };
+
+export const TEMPLATES_DIR = path.json(process.cwd(), 'src', 'templates');
