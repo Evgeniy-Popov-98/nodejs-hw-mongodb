@@ -67,21 +67,24 @@ export const createContactController = async (req, res) => {
 };
 
 export const patchContactController = async (req, res) => {
-  const { body, user } = req;
-  const contactId = isValidContactId(req, res);
+  const { body } = req;
+  const {
+    params: { contactId },
+    user: { _id: userId },
+  } = req;
   const photo = req.file;
 
   let photoUrl;
 
   if (photo) {
-    if (env(CLOUDINARY.ENABLE_CLOUDINARY === 'true')) {
+    if (env(CLOUDINARY.ENABLE_CLOUDINARY) === 'true') {
       photoUrl = await saveFileToCloudinary(photo);
     } else {
       photoUrl = await saveFileToUploadDir(photo);
     }
   }
 
-  const contact = await upsertsContact(contactId, user._id, {
+  const contact = await upsertsContact(contactId, userId, {
     ...body,
     photo: photoUrl,
   });
@@ -100,10 +103,13 @@ export const patchContactController = async (req, res) => {
 };
 
 export const putContactController = async (req, res) => {
-  const { body, user } = req;
-  const contactId = isValidContactId(req, res);
+  const { body } = req;
+  const {
+    params: { contactId },
+    user: { _id: userId },
+  } = req;
 
-  const contact = await upsertsContact(contactId, user._id, body, {
+  const contact = await upsertsContact(contactId, userId, body, {
     upsert: true,
   });
 

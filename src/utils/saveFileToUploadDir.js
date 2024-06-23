@@ -5,7 +5,7 @@ import {
   APP_DOMAIN,
   TEMPLATES_UPLOAD_DIR,
   UPLOAD_DIR,
-} from '../constants/constants';
+} from '../constants/constants.js';
 
 export const saveFileToUploadDir = async (file) => {
   await fs.rename(
