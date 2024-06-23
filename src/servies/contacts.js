@@ -1,6 +1,7 @@
 import { SORT_ORDER } from '../constants/constants.js';
 import { Contact } from '../db/models/contact.js';
 import { createPaginationData } from '../utils/createPaginationData.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export const getAllContacts = async ({
   page = 1,
@@ -47,8 +48,10 @@ export const getContactById = (contactId, userId) => {
   return contact;
 };
 
-export const createContact = (payload, userId) => {
-  const contact = Contact.create({ ...payload, userId: userId });
+export const createContact = async ({ photo, ...payload }, userId) => {
+  const url = await saveFileToUploadDir(photo);
+
+  const contact = Contact.create({ ...payload, userId: userId, photo: url });
 
   return contact;
 };

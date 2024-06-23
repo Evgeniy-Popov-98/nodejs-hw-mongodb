@@ -38,16 +38,16 @@ contactsRouter.get(
 contactsRouter.post(
   '/',
   checkRoles(ROLES.ADMIN),
-  validateBody(createContactSchema),
   upload.single('photo'),
+  validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
 contactsRouter.put(
   '/:contactId',
   checkRoles(ROLES.ADMIN),
-  validateBody(createContactSchema),
   upload.single('photo'),
+  validateBody(createContactSchema),
   ctrlWrapper(putContactController),
 );
 
