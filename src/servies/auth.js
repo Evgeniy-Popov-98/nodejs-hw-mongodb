@@ -111,7 +111,7 @@ export const requestResetToken = async (email) => {
 
   const html = template({
     name: user.name,
-    link: `${env(APP_DOMAIN)}/reset-password?token=${resetToken}`,
+    link: `https://${env(APP_DOMAIN)}/reset-password?token=${resetToken}`,
   });
 
   try {
@@ -133,9 +133,10 @@ export const resetPassword = async (payload) => {
   let entries;
 
   try {
-    entries = jwt.verify(payload.token, env('JWT_SECRET'));
+    entries = jwt.verify(payload.token, env(JWT_SECRET));
   } catch (err) {
-    if (err instanceof Error) throw createHttpError(401, err.message);
+    if (err instanceof Error)
+      throw createHttpError(401, 'Token is expired or invalid.');
     throw err;
   }
 
@@ -147,6 +148,11 @@ export const resetPassword = async (payload) => {
   if (!user) {
     throw createHttpError(404, 'User not foud!');
   }
+
+  await Session.deleteOne({
+    _id: payload.sessionId,
+    refreshToken: payload.refreshToken,
+  });
 
   const hashedPassword = await bcrypt.hash(payload.password, 10);
 
