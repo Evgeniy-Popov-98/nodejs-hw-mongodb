@@ -32,11 +32,11 @@ export const setupServer = () => {
 
   app.use(router);
 
+  app.use('/uploads', express.static(UPLOAD_DIR));
+
   app.use('*', notFoundHandler);
 
   app.use(errorHandler);
-
-  app.use('/uploads', express.static(UPLOAD_DIR));
 
   const PORT = env(ENV_VARS.PORT, 3000);
   app.listen(PORT, () => {

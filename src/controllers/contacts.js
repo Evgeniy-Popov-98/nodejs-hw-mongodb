@@ -6,7 +6,6 @@ import {
   upsertsContact,
 } from '../servies/contacts.js';
 import createHttpError from 'http-errors';
-import { isValidContactId } from '../middleware/isValidContactId.js';
 import { parsePaginationPrams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
