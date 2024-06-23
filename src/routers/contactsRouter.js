@@ -15,6 +15,7 @@ import { ROLES } from '../constants/constants.js';
 import { checkRoles } from '../middleware/checkRoles.js';
 import { authenticate } from '../middleware/authenticate.js';
 import { isValidContactId } from '../middleware/isValidContactId.js';
+import { upload } from '../middleware/multerUpload.js';
 
 const contactsRouter = Router();
 
@@ -38,6 +39,7 @@ contactsRouter.post(
   '/',
   checkRoles(ROLES.ADMIN),
   validateBody(createContactSchema),
+  upload.single('photo'),
   ctrlWrapper(createContactController),
 );
 
@@ -45,12 +47,14 @@ contactsRouter.put(
   '/:contactId',
   checkRoles(ROLES.ADMIN),
   validateBody(createContactSchema),
+  upload.single('photo'),
   ctrlWrapper(putContactController),
 );
 
 contactsRouter.patch(
   '/:contactId',
   checkRoles(ROLES.ADMIN, ROLES.USER),
+  upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );

@@ -10,6 +10,10 @@ import { isValidContactId } from '../middleware/isValidContactId.js';
 import { parsePaginationPrams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { CLOUDINARY } from '../constants/constants.js';
+import { env } from '../utils/env.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationPrams(req.query);
@@ -65,8 +69,22 @@ export const createContactController = async (req, res) => {
 export const patchContactController = async (req, res) => {
   const { body, user } = req;
   const contactId = isValidContactId(req, res);
+  const photo = req.file;
 
-  const contact = await upsertsContact(contactId, user._id, body);
+  let photoUrl;
+
+  if (photo) {
+    if (env(CLOUDINARY.ENABLE_CLOUDINARY === 'true')) {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  const contact = await upsertsContact(contactId, user._id, {
+    ...body,
+    photo: photoUrl,
+  });
 
   if (!contact.result) {
     throw createHttpError(404, { message: 'Contact not found' });
