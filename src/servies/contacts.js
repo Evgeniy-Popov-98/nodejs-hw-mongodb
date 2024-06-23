@@ -1,6 +1,8 @@
-import { SORT_ORDER } from '../constants/constants.js';
+import { CLOUDINARY, SORT_ORDER } from '../constants/constants.js';
 import { Contact } from '../db/models/contact.js';
 import { createPaginationData } from '../utils/createPaginationData.js';
+import { env } from '../utils/env.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export const getAllContacts = async ({
@@ -49,9 +51,19 @@ export const getContactById = (contactId, userId) => {
 };
 
 export const createContact = async ({ photo, ...payload }, userId) => {
-  const url = await saveFileToUploadDir(photo);
+  let photoUrl;
 
-  const contact = Contact.create({ ...payload, userId: userId, photo: url });
+  if (env(CLOUDINARY.ENABLE_CLOUDINARY) === 'true') {
+    photoUrl = await saveFileToCloudinary(photo);
+  } else {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const contact = Contact.create({
+    ...payload,
+    userId: userId,
+    photo: photoUrl.url,
+  });
 
   return contact;
 };

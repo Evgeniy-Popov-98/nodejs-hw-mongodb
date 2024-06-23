@@ -107,9 +107,21 @@ export const putContactController = async (req, res) => {
     params: { contactId },
     user: { _id: userId },
   } = req;
+  const photo = req.file;
 
-  const contact = await upsertsContact(contactId, userId, body, {
-    upsert: true,
+  let photoUrl;
+
+  if (photo) {
+    if (env(CLOUDINARY.ENABLE_CLOUDINARY) === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  const contact = await upsertsContact(contactId, userId, {
+    ...body,
+    photo: photoUrl.url,
   });
 
   if (!contact.result) {
