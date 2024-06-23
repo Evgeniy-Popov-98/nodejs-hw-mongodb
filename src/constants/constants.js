@@ -32,4 +32,6 @@ export const SMTP = {
   SMTP_FROM: 'SMTP_FROM',
 };
 
-export const TEMPLATES_DIR = path.json(process.cwd(), 'src', 'templates');
+export const JWT_SECRET = 'JWT_SECRET';
+
+export const APP_DOMAIN = 'http://localhost:3000/auth';

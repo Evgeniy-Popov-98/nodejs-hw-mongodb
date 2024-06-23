@@ -1,18 +1,20 @@
 import createHttpError from 'http-errors';
-import handlebars from 'handlebars';
+// import handlebars from 'handlebars';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
-import path from 'node:path';
-import fs from 'node:fs/promises';
+// import path from 'node:path';
+// import fs from 'node:fs/promises';
 
 import { User } from '../db/models/user.js';
 import { Session } from '../db/models/session.js';
 import {
   ACCESS_TOKEN_LIFE_TIME,
+  APP_DOMAIN,
+  JWT_SECRET,
   REFRESH_TOKEN_LIFE_TIME,
   SMTP,
-  TEMPLATES_DIR,
+  //   TEMPLATES_DIR,
 } from '../constants/constants.js';
 import { env } from '../utils/env.js';
 import { sendEmail } from '../utils/sendEMail.js';
@@ -85,39 +87,46 @@ export const requestResetToken = async (email) => {
     throw createHttpError(404, 'User not found!');
   }
 
-  const resetToken = jwt.sing(
+  const resetToken = jwt.sign(
     {
       sub: user._id,
       email,
     },
-    env('JWT_SECRET'),
+    env(JWT_SECRET),
     {
       expiresIn: '15m',
     },
   );
 
-  const resetPasswordTemplatePath = path.json(
-    TEMPLATES_DIR,
-    'reset-password.html',
-  );
+  //   const resetPasswordTemplatePath = path.json(
+  //     TEMPLATES_DIR,
+  //     'reset-password.html',
+  //   );
 
-  const templateSource = (
-    await fs.readFile(resetPasswordTemplatePath)
-  ).toString();
+  //   const templateSource = (
+  //     await fs.readFile(resetPasswordTemplatePath)
+  //   ).toString();
 
-  const template = handlebars.compile(templateSource);
+  //   const template = handlebars.compile(templateSource);
 
-  const html = template({
-    name: user.name,
-    link: `${env('APP_DOMAIN')}/reset-password?token=${resetToken}`,
-  });
+  //   const html = template({
+  //     name: user.name,
+  //     link: `${env(APP_DOMAIN)}/reset-password?token=${resetToken}`,
+  //   });
 
-  await sendEmail({
-    from: env(SMTP.SMTP_FROM),
-    to: email,
-    subject: 'Reset your password',
-    html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
-  });
+  try {
+    await sendEmail({
+      from: env(SMTP.SMTP_FROM),
+      to: email,
+      subject: 'Reset your password',
+      html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
+    });
+  } catch (error) {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
 };
 
 export const resetPassword = async (payload) => {
