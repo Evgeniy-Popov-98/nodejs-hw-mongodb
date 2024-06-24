@@ -25,19 +25,19 @@ contactsRouter.use('./:contactId', isValidContactId('contactId'));
 
 contactsRouter.get(
   '/',
-  checkRoles(ROLES.ADMIN),
+  //   checkRoles(ROLES.ADMIN),
   ctrlWrapper(getContactsController),
 );
 
 contactsRouter.get(
   '/:contactId',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+  //   checkRoles(ROLES.ADMIN, ROLES.USER),
   ctrlWrapper(getContactByIdController),
 );
 
 contactsRouter.post(
   '/',
-  checkRoles(ROLES.ADMIN),
+  //   checkRoles(ROLES.ADMIN),
   upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
@@ -45,7 +45,7 @@ contactsRouter.post(
 
 contactsRouter.put(
   '/:contactId',
-  checkRoles(ROLES.ADMIN),
+  //   checkRoles(ROLES.ADMIN),
   upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(putContactController),
@@ -53,7 +53,7 @@ contactsRouter.put(
 
 contactsRouter.patch(
   '/:contactId',
-  checkRoles(ROLES.ADMIN, ROLES.USER),
+  //   checkRoles(ROLES.ADMIN, ROLES.USER),
   upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
@@ -61,7 +61,7 @@ contactsRouter.patch(
 
 contactsRouter.delete(
   '/:contactId',
-  checkRoles(ROLES.ADMIN),
+  //   checkRoles(ROLES.ADMIN),
   ctrlWrapper(deleteContactByIdController),
 );
 
