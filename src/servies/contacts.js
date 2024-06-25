@@ -84,10 +84,7 @@ export const upsertsContact = async (
     },
   );
 
-  return {
-    result,
-    isNew: !result?.lastErrorObject?.updatedExisting,
-  };
+  return result;
 };
 
 export const deleteContactById = async (contactId, userId) => {

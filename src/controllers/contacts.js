@@ -92,10 +92,8 @@ export const patchContactController = async (req, res) => {
     throw createHttpError(404, { message: 'Contact not found' });
   }
 
-  const status = contact.isNew ? 201 : 200;
-
-  res.status(status).json({
-    status,
+  res.status(200).json({
+    status: 200,
     message: 'Successfully patched a contact!',
     data: contact.result,
   });
@@ -128,10 +126,8 @@ export const putContactController = async (req, res) => {
     throw createHttpError(404, { message: 'Contact not found' });
   }
 
-  const status = contact.isNew ? 201 : 200;
-
-  res.status(status).json({
-    status,
+  res.status(200).json({
+    status: 200,
     message: 'Successfully upserted contact!',
     data: contact.result,
   });
