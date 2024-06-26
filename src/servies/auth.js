@@ -18,6 +18,10 @@ import {
 } from '../constants/constants.js';
 import { env } from '../utils/env.js';
 import { sendEmail } from '../utils/sendEMail.js';
+import {
+  getFullNameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuthClient.js';
 
 const createSession = () => {
   return {
@@ -157,4 +161,27 @@ export const resetPassword = async (payload) => {
   const hashedPassword = await bcrypt.hash(payload.password, 10);
 
   await User.updateOne({ _id: user._id }, { password: hashedPassword });
+};
+
+export const loginOrSignupWithGoogle = async (code) => {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+  if (!payload) throw createHttpError(401, 'Error payload!');
+
+  let user = user.findOne({ email: payload.email });
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+    user = User.create({
+      name: getFullNameFromGoogleTokenPayload(payload),
+      email: payload.email,
+      password,
+      role: 'user',
+    });
+  }
+  const newSession = createSession();
+
+  return await Session.create({
+    userId: user._id,
+    ...newSession,
+  });
 };
