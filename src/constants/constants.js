@@ -49,3 +49,5 @@ export const CLOUDINARY = {
   API_SECRET: 'API_SECRET',
   ENABLE_CLOUDINARY: 'ENABLE_CLOUDINARY',
 };
+
+export const SWAGGER_PATH = path.json(process.cwd(), 'docs', 'swagger.json');
