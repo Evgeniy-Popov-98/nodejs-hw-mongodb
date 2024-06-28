@@ -1,28 +1,28 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Students app
+  title: <назва вашого додатку>
   license:
     name: Apache 2.0
     url: <http://www.apache.org/licenses/LICENSE-2.0.html>
   description: >
-    This is a documentation of students app
+    <опис вашого додатку>
 tags:
-  - name: Students
-    description: Operations about users.
+  - name: Contacts
+    description: Operations about contacts.
   - name: Auth
     description: Auth operations.
 servers:
   - url: <http://localhost:3000>
-  # - url: <https://example.com/api/v1>
+  - url: #посилання на задеплоєний сайт
 paths:
   /contacts/{id}:
     get:
       $ref: ../swagger/paths/contacts/{id}/get.yaml
-  /contacts:
+  /contacts/:
     get:
       $ref: ../swagger/paths/contacts/get.yaml
-  /contacts:
+  /contacts/:
     post:
       $ref: ../swagger/paths/contacts/post.yaml
 components:
