@@ -1,11 +1,8 @@
 type: object
 required:
-  - _id
   - name
-  - age
-  - gender
-  - avgMark
-  - onDuty
+  - phoneNumber
+  - email
 properties:
   _id:
     description: "Contact's id"

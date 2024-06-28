@@ -14,27 +14,19 @@ requestBody:
           - name
           - phoneNumber
           - email
-          - isFavourite
-          - contactType
-          - userId
-          - photo
         properties:
           name:
             description: "Contact's name"
             type: string
             example: 'John Doe'
-          phoneNumber:
-           description: "Contact's phone number"
-           type: string
-           example: '380982355908'
           email:
            description: "Contact's email"
             type: string
            example: 'googl@gmail.com'
-         contactType:
-          description: "Contact's type"
-          type: string
-          enum: ['work', 'home', 'personal']
+          contactType:
+            description: "Contact's type"
+            type: string
+            enum: ['work', 'home', 'personal']
           userId:
             description: "Contact's user id"
             type: string
@@ -60,7 +52,7 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully created a student!
+              example: Successfully created a contact!
             data:
               type: object
               $ref: '../../components/schemas/contact.yaml'
