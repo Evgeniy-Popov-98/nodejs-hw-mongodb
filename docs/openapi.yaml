@@ -14,7 +14,7 @@ tags:
     description: Auth operations.
 servers:
   - url: <http://localhost:3000>
-  # - url: #посилання на задеплоєний сайт
+  - url: <https://nodejs-hw-mongodb-w3ls.onrender.com>
 paths:
   /contacts/{id}:
     get:
