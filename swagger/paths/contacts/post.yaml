@@ -23,7 +23,7 @@ requestBody:
             description: "Contact's email"
             type: string
             example: 'googl@gmail.com'
-           phoneNumber:
+          phoneNumber:
             description: "Contact's phone number"
             type: string
             example: '555-44-33'
@@ -61,6 +61,6 @@ responses:
               type: object
               $ref: '../../components/schemas/contact.yaml'
   '401':
-    $ref: ..\..\..\components\responses\401.yaml
+    $ref: ..\..\components\responses\401.yaml
   '404':
-    $ref: ..\..\..\components\responses\404.yaml
+    $ref: ..\..\components\responses\404.yaml
