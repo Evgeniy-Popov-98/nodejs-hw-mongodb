@@ -20,6 +20,8 @@ export const setupServer = () => {
     }),
   );
 
+  app.use('/api-docs', swaggerDocs());
+
   app.use(cors());
 
   app.use(cookieParser());

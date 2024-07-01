@@ -1,8 +1,8 @@
 tags:
   - Contacts
-summary: Upserts contact
+summary: Upserts contact by id
 operationId: upsertsContact
-description: 'Upsert a contact with payload'
+description: 'You can upsert a contact with payload'
 security:
   - bearerAuth: []
 parameters:
@@ -23,13 +23,13 @@ requestBody:
             type: string
             example: 'John Doe'
           phoneNumber:
-           description: "Contact's phone number"
-           type: string
-           example: '380982355908'
-          email:
-           description: "Contact's email"
+            description: "Contact's phone number"
             type: string
-           example: 'googl@gmail.com'
+            example: '380982355908'
+          email:
+            description: "Contact's email"
+            type: string
+            example: 'googl@gmail.com'
           contactType:
             description: "Contact's type"
             type: string
@@ -44,7 +44,7 @@ requestBody:
             format: binary
 responses:
   '200':
-    description: Upserts a contact
+    description: 'Upserts a contact'
     content:
       application/json:
         schema:
@@ -59,10 +59,10 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully upserted a contact!
+              example: 'Successfully upserted a contact!'
             data:
               type: object
-              $ref: '../../components/schemas/contact.yaml'
+              $ref: ..\..\..\components\schemas\contact.yaml
   '401':
     $ref: ..\..\..\components\responses\401.yaml
   '404':

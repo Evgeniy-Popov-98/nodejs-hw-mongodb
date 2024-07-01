@@ -1,0 +1,47 @@
+tags:
+  - Auth
+summary: Login user
+operationId: loginUser
+description: 'You can a login user'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            description: "User's email"
+            type: string
+            example: 'google@gmail.com'
+          password:
+            description: "User's password"
+            type: string
+            example: 'A213warl'
+responses:
+  '201':
+    description: 'Successfully logged in an user!'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully logged in an user!'
+            data:
+              type: object
+              $ref: ..\..\components\schemas\userLogin.yaml
+  '404':
+    $ref: ..\..\components\responses\404.yaml

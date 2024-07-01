@@ -1,21 +1,23 @@
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
+import fs from 'node:fs';
 import { OAuth2Client } from 'google-auth-library';
 import { env } from './env.js';
 import createHttpError from 'http-errors';
 import { ENV_VARS } from '../constants/constants.js';
 
-const PATH_JSON = path.json(process.cwd(), 'google-oauth.json');
-
-const oauthConfig = JSON.parse(await readFile(PATH_JSON));
+const oauthConfig = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'google-oauth.json')).toString(),
+);
 
 const googleOAuthClient = new OAuth2Client({
   clientId: env(ENV_VARS.GOOGLE_AUTH_CLIENT_ID),
   clientSecret: env(ENV_VARS.GOOGLE_AUTH_CLIENT_SECRET),
+  project_id: oauthConfig.web.project_id,
   redirectUri: oauthConfig.web.redirect_uris[0],
 });
+
 export const generateAuthUrl = () => {
-  googleOAuthClient.generateAuthUrl({
+  return googleOAuthClient.generateAuthUrl({
     access_type: 'offline',
     scope: [
       '<https://www.googleapis.com/auth/userinfo.email>',
@@ -25,15 +27,22 @@ export const generateAuthUrl = () => {
 };
 
 export const validateCode = async (code) => {
-  const respons = await googleOAuthClient.getToken(code);
+  try {
+    const respons = await googleOAuthClient.getToken(code);
 
-  if (!respons.tokens.id_token) throw createHttpError(401, 'Unauthorized');
+    const idToken = respons.tokens.id_token;
 
-  const ticket = await googleOAuthClient.verifyIdToken({
-    idToken: respons.tokens.id_token,
-  });
+    if (!idToken) throw createHttpError(401, 'Unauthorized');
 
-  return ticket;
+    const ticket = await googleOAuthClient.verifyIdToken({
+      idToken,
+    });
+
+    return ticket;
+  } catch (error) {
+    console.log(error);
+    throw createHttpError(500, 'Error during google oauth authorization');
+  }
 };
 
 export const getFullNameFromGoogleTokenPayload = (payload) => {
