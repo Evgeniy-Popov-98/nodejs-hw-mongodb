@@ -28,9 +28,12 @@ paths:
       $ref: ../swagger/paths/contacts/get.yaml
     post:
       $ref: ../swagger/paths/contacts/post.yaml
-  /auth:
+  /auth/register:
     post:
-      $ref: ../swagger/paths/auth/register.yaml
+      $ref: ../swagger/paths/auth/register/register.yaml
+  /auth/login:
+    post:
+      $ref: ../swagger/paths/auth/login/login.yaml
 components:
   securitySchemes:
     bearerAuth:
