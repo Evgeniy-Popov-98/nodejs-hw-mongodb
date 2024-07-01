@@ -1,13 +1,13 @@
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
+import fs from 'node:fs';
 import { OAuth2Client } from 'google-auth-library';
 import { env } from './env.js';
 import createHttpError from 'http-errors';
 import { ENV_VARS } from '../constants/constants.js';
 
-const PATH_JSON = path.json(process.cwd(), 'google-oauth.json');
-
-const oauthConfig = JSON.parse(await readFile(PATH_JSON));
+const oauthConfig = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'google-oauth.json')).toString(),
+);
 
 const googleOAuthClient = new OAuth2Client({
   clientId: env(ENV_VARS.GOOGLE_AUTH_CLIENT_ID),
@@ -15,7 +15,7 @@ const googleOAuthClient = new OAuth2Client({
   redirectUri: oauthConfig.web.redirect_uris[0],
 });
 export const generateAuthUrl = () => {
-  googleOAuthClient.generateAuthUrl({
+  return googleOAuthClient.generateAuthUrl({
     access_type: 'offline',
     scope: [
       '<https://www.googleapis.com/auth/userinfo.email>',

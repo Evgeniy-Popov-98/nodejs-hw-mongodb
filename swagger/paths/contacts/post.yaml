@@ -20,9 +20,13 @@ requestBody:
             type: string
             example: 'John Doe'
           email:
-           description: "Contact's email"
+            description: "Contact's email"
             type: string
-           example: 'googl@gmail.com'
+            example: 'googl@gmail.com'
+           phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: '555-44-33'
           contactType:
             description: "Contact's type"
             type: string
