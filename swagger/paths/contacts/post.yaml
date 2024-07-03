@@ -18,14 +18,19 @@ requestBody:
             description: "Contact's name"
             type: string
             example: 'John Doe'
-          email:
-            description: "Contact's email"
-            type: string
-            example: 'googl@gmail.com'
           phoneNumber:
             description: "Contact's phone number"
             type: string
             example: '555-44-33'
+          email:
+            description: "Contact's email"
+            type: string
+            example: 'googl@gmail.com'
+          isFavourite:
+            description: 'Is the contact in your favorites?'
+            type: boolean
+            example: 'false'
+            default: 'false'
           contactType:
             description: "Contact's type"
             type: string
