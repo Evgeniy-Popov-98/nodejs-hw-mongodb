@@ -1,13 +1,13 @@
 import path from 'node:path';
-import fs from 'node:fs';
+import { readFile } from 'fs/promises';
 import { OAuth2Client } from 'google-auth-library';
 import { env } from './env.js';
 import createHttpError from 'http-errors';
 import { ENV_VARS } from '../constants/constants.js';
 
-const oauthConfig = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), 'google-oauth.json')).toString(),
-);
+const PATH_JSON = path.join(process.cwd(), 'google-oauth.json');
+
+const oauthConfig = JSON.parse(await readFile(PATH_JSON));
 
 const googleOAuthClient = new OAuth2Client({
   clientId: env(ENV_VARS.GOOGLE_AUTH_CLIENT_ID),
@@ -20,17 +20,17 @@ export const generateAuthUrl = () => {
   return googleOAuthClient.generateAuthUrl({
     access_type: 'offline',
     scope: [
-      '<https://www.googleapis.com/auth/userinfo.email>',
-      '<https://www.googleapis.com/auth/userinfo.profile>',
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
     ],
   });
 };
 
 export const validateCode = async (code) => {
   try {
-    const respons = await googleOAuthClient.getToken(code);
+    const { tokens } = await googleOAuthClient.getToken(code);
 
-    const idToken = respons.tokens.id_token;
+    const idToken = tokens.id_token;
 
     if (!idToken) throw createHttpError(401, 'Unauthorized');
 

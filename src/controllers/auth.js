@@ -112,7 +112,7 @@ export const getGoogleOAuthUrlController = (req, res) => {
 };
 
 export const loginWithGoogleController = async (req, res) => {
-  const session = loginOrSignupWithGoogle(req.body.code);
+  const session = await loginOrSignupWithGoogle(req.body.code);
 
   setupSession(res, session);
 
