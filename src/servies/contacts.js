@@ -51,21 +51,26 @@ export const getContactById = (contactId, userId) => {
 };
 
 export const createContact = async ({ photo, ...payload }, userId) => {
-  let photoUrl;
+  if (photo) {
+    let photoUrl;
 
-  if (env(CLOUDINARY.ENABLE_CLOUDINARY) === 'true') {
-    photoUrl = await saveFileToCloudinary(photo);
+    if (env(CLOUDINARY.ENABLE_CLOUDINARY) === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+
+    return Contact.create({
+      ...payload,
+      userId: userId,
+      photo: photoUrl.url,
+    });
   } else {
-    photoUrl = await saveFileToUploadDir(photo);
+    return Contact.create({
+      ...payload,
+      userId: userId,
+    });
   }
-
-  const contact = Contact.create({
-    ...payload,
-    userId: userId,
-    photo: photoUrl.url,
-  });
-
-  return contact;
 };
 
 export const upsertsContact = async (
